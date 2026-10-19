@@ -24,9 +24,9 @@ This log is the evidence for the "Overfitting / data-snooping" answer and the tr
 
 | # | Date | Change | Period evaluated | Kept? | Reason |
 |---|------|--------|------------------|-------|--------|
-| 1 | 19 Oct 2026 | V1 Vanilla monthly theta-weighted dispersion (baseline) | design, then test once | Reported | Baseline. Half-spread Sharpe 1.17 design / 0.10 test; DSR test 0.51 |
-| 2 | 19 Oct 2026 | V2 Event-timed: long straddles only on names with earnings inside the holding period, theta-matched to the short SPX straddle; no trade if no name reports | design, then test once | Reported | Sharpe 1.10 design / 0.28 test; best test break-even (1.31x half-spread); DSR test 0.76, not significant |
-| 3 | 19 Oct 2026 | V3 Signal-filtered: V1 only when the point-in-time ex-event implied correlation is above its trailing 252-day median (threshold fixed, not tuned) | design, then test once | Reported | Sharpe 1.29 design / 0.29 test; DSR test 0.69, not significant |
+| 1 | 19 Oct 2026 | V1 Vanilla monthly theta-weighted dispersion (baseline) | design, then test once | Reported | Baseline. Half-spread Sharpe 1.17 design / 0.10 test; DSR test 0.49 |
+| 2 | 19 Oct 2026 | V2 Event-timed: long straddles only on names with earnings inside the holding period, theta-matched to the short SPX straddle; no trade if no name reports | design, then test once | Reported | Sharpe 1.16 design / 0.30 test; best test break-even (1.34x half-spread); DSR test 0.77, not significant (after Amendment 3) |
+| 3 | 19 Oct 2026 | V3 Signal-filtered: V1 only when the point-in-time ex-event implied correlation is above its trailing 252-day median (threshold fixed, not tuned) | design, then test once | Reported | Sharpe 1.33 design / 0.32 test; DSR test 0.70, not significant (after Amendment 3) |
 
 ## Amendment 1 (19 Oct 2026, before any results were computed)
 
@@ -52,3 +52,9 @@ WRDS access was granted (OptionMetrics, CRSP, Compustat). The primary data sourc
 - H1: earnings half supported (raw implied correlation falls with the weight reporting inside the window; the ex-event measure removes it out of sample). Macro half rejected (no FOMC/CPI effect on raw implied correlation; macro releases scale both legs).
 - H2: test-period correlation premium +0.025 raw (t 2.9) vs +0.007 ex-event (t 0.8) - the recent premium is event variance.
 - H3: event-timed beats vanilla out of sample, but not significantly (DSR < 0.95) and not robust to full-spread costs -> not supported under the pre-registered criterion.
+
+## Amendment 3 (19 Oct 2026, implementation correction found in a code audit after the test run)
+
+- An audit of the pitfall checklist against the code found that V2 (which names report inside the holding period) and the V3 signal (ex-event implied correlation) placed each earnings announcement on its *reaction day* - the one of {report date, next trading day} with the larger stock-minus-index return. That choice uses realised returns, so it is not available ex ante.
+- Correction: both trading rules now use the recorded Compustat report date (d0); the reaction day is kept only for the measurement study (H1 regressions, event-level premia). It changed 267 of 17,569 V2 name-month assignments (1.5%).
+- No parameter, threshold or variant definition was changed. Effect on the test period at half-spread costs: V2 Sharpe 0.28 -> 0.30, V3 0.29 -> 0.32 (V1 unaffected). The correction did not remove an artificial advantage; both versions are disclosed in the report.

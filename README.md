@@ -21,9 +21,9 @@ Using OptionMetrics, CRSP and Compustat data for the point-in-time top fifty S&P
 
 | Variant | 1996–2012 (design) | 2013–2025 (test) | Deflated Sharpe (test) |
 |:---|---:|---:|---:|
-| V1 Vanilla monthly dispersion | 1.17 | 0.10 | 0.51 |
-| V2 Event-timed dispersion | 1.10 | 0.28 | 0.76 |
-| V3 Signal-filtered dispersion | 1.29 | 0.29 | 0.69 |
+| V1 Vanilla monthly dispersion | 1.17 | 0.10 | 0.49 |
+| V2 Event-timed dispersion | 1.16 | 0.30 | 0.77 |
+| V3 Signal-filtered dispersion | 1.33 | 0.32 | 0.70 |
 
 Event-timing ranks ahead of vanilla dispersion out of sample, as the decomposition implies, but no variant is significant after correction for multiple testing.
 

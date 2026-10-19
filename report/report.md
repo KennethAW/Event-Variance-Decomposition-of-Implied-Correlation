@@ -59,7 +59,7 @@ On the first trading day after each standard monthly expiry, the book sells at-t
 
 Options are executed at the mid plus a fraction $c$ of the quoted half-spread on every leg, with $c \in \{0, 0.5, 1\}$; $c = 0.5$ is the central case. Hedge trades cost 1 bp of turnover for stocks and 0.5 bp for the index, and premia are financed at the three-month T-bill rate. Profit is measured in basis points of index notional per non-overlapping monthly holding period. Because the book is sized on fixed notional rather than reinvested capital, cumulative return is the sum of monthly profits.
 
-Three variants were pre-registered. V1 trades every month. V2, the event-timed book, holds long single-stock straddles only on names that report earnings within the holding period. V3, the signal-filtered book, trades V1 only when the point-in-time ex-event implied correlation exceeds its trailing one-year median.
+Three variants were pre-registered. V1 trades every month. V2, the event-timed book, holds long single-stock straddles only on names whose recorded report date falls within the holding period. V3, the signal-filtered book, trades V1 only when the point-in-time ex-event implied correlation exceeds its trailing one-year median.
 
 ## 3.2 Results
 
@@ -68,21 +68,21 @@ Table 2 reports the central-case performance. The design period (1996–2012) wa
 | Variant | Sample | Months | Cumulative (bp) | Mean per month (bp) | Sharpe (annualised) | Max drawdown (bp) | *t*-statistic | Deflated Sharpe |
 |:---|:---|---:|---:|---:|---:|---:|---:|---:|
 | V1 Vanilla | In-sample | 204 | +5,270 | +25.8 | 1.17 | −352 | 4.84 | 1.00 |
-| | Out-of-sample | 152 | +269 | +1.8 | 0.10 | −484 | 0.35 | 0.51 |
-| V2 Event-timed | In-sample | 192 | +6,205 | +32.3 | 1.10 | −457 | 4.39 | 1.00 |
-| | Out-of-sample | 151 | +1,197 | +7.9 | 0.28 | −919 | 1.00 | 0.76 |
-| V3 Signal-filtered | In-sample | 98 | +3,080 | +31.4 | 1.29 | −299 | 3.68 | 1.00 |
-| | Out-of-sample | 68 | +427 | +6.3 | 0.29 | −549 | 0.70 | 0.69 |
+| | Out-of-sample | 152 | +269 | +1.8 | 0.10 | −484 | 0.35 | 0.49 |
+| V2 Event-timed | In-sample | 192 | +6,835 | +35.6 | 1.16 | −454 | 4.65 | 1.00 |
+| | Out-of-sample | 152 | +1,272 | +8.4 | 0.30 | −863 | 1.07 | 0.77 |
+| V3 Signal-filtered | In-sample | 99 | +3,200 | +32.3 | 1.33 | −299 | 3.82 | 1.00 |
+| | Out-of-sample | 69 | +474 | +6.9 | 0.32 | −502 | 0.77 | 0.70 |
 
 Table: **Table 2.** Performance at half-spread execution costs.
 
-The in-sample results are strong and statistically unambiguous; the out-of-sample results are not. Every variant loses most of its performance after 2012 (Figure 2), and none survives correction for multiple testing: the Deflated Sharpe Ratios of 0.51–0.76 fall well short of the conventional 0.95 threshold. Cost sensitivity sharpens the conclusion (Table 3). V1 is profitable only if execution costs stay below 69% of the quoted half-spread, whereas V2 remains profitable even at full spread.
+The in-sample results are strong and statistically unambiguous; the out-of-sample results are not. Every variant loses most of its performance after 2012 (Figure 2), and none survives correction for multiple testing: the Deflated Sharpe Ratios of 0.49–0.77 fall well short of the conventional 0.95 threshold. Cost sensitivity sharpens the conclusion (Table 3). V1 is profitable only if execution costs stay below 69% of the quoted half-spread, whereas V2 remains profitable even at full spread.
 
 | Out-of-sample | V1 | V2 | V3 |
 |:---|---:|---:|---:|
-| Sharpe ratio at mid | 0.37 | 0.46 | 0.59 |
-| Sharpe ratio at full spread | −0.17 | 0.11 | 0.01 |
-| Break-even cost (multiple of quoted half-spread) | 0.69 | 1.31 | 1.02 |
+| Sharpe ratio at mid | 0.37 | 0.49 | 0.62 |
+| Sharpe ratio at full spread | −0.17 | 0.12 | 0.04 |
+| Break-even cost (multiple of quoted half-spread) | 0.69 | 1.34 | 1.07 |
 
 Table: **Table 3.** Sensitivity of out-of-sample performance to execution costs.
 
@@ -113,7 +113,7 @@ H1 is half supported. Raw implied correlation falls by 6 points in the design pe
 
 H2 receives a clear answer. Figure 3 shows the premium narrowing markedly after 2012. In the test period the raw premium is 2.5 correlation points and significant, whereas the ex-event premium is 0.7 points and indistinguishable from zero. The premium available after 2012 is, in effect, a premium for bearing event variance.
 
-H3 is not supported under the pre-registered criterion. The ordering of the variants is consistent with H2: the event-timed book outperforms vanilla dispersion out of sample (Sharpe ratio 0.28 against 0.10; break-even cost 1.31 against 0.69 half-spreads). The difference is not statistically significant, however, and two of the three variants lose money at full spread. The decay is visible in the attribution: the short index leg earned 44 bp per month before 2013 and 1.9 bp afterwards. This pattern is consistent with the expansion of systematic dispersion products after the financial crisis, although the present design cannot identify crowding directly.
+H3 is not supported under the pre-registered criterion. The ordering of the variants is consistent with H2: the event-timed book outperforms vanilla dispersion out of sample (Sharpe ratio 0.30 against 0.10; break-even cost 1.34 against 0.69 half-spreads). The difference is not statistically significant, however, and two of the three variants lose money at full spread. The decay is visible in the attribution: the short index leg earned 44 bp per month before 2013 and 1.9 bp afterwards. This pattern is consistent with the expansion of systematic dispersion products after the financial crisis, although the present design cannot identify crowding directly.
 
 # 4. Methodology Defense
 
@@ -139,7 +139,7 @@ where $V_T = \sigma_T^2 \, T/365$ is total implied variance to maturity $T$ (Dub
 
 ## Look-ahead bias
 
-The basket in force on any date is the most recent quarterly rebalance on or before it, located by binary search and built from the previous day's capitalisations. FOMC and CPI dates are scheduled and published in advance. The V3 signal uses only expanding-window index estimates and each stock's previous jump estimates, all available at the entry close. Option prices are entry-date quotes and payoffs use official settlement values. Two ex-post constructs exist in the code, and both are confined to measurement: the contemporaneous jump estimate used in the H1 regressions, and the choice between the announcement day and the following day as the reaction day. Neither enters a trading decision.
+The basket in force on any date is the most recent quarterly rebalance on or before it, located by binary search and built from the previous day's capitalisations. FOMC and CPI dates are scheduled and published in advance. The V3 signal uses only expanding-window index estimates and each stock's previous jump estimates, all available at the entry close. Option prices are entry-date quotes, and payoffs use the expiry-day settlement price: the opening level for AM-settled SPX options and the close for single stocks. Two ex-post constructs exist in the code: the contemporaneous jump estimate used in the H1 regressions, and the reaction day, chosen as whichever of the report date and the following trading day shows the larger stock-minus-index move. An audit of this checklist against the code found that the first version of V2 and of the V3 signal placed announcements on the reaction day, which uses realised returns. Both rules were corrected to use the recorded report date, without changing any parameter, and the correction is logged as Amendment 3 in the research log. It altered 267 of 17,569 name-month assignments (1.5%) and moved the out-of-sample Sharpe ratios of V2 and V3 from 0.28 and 0.29 to 0.30 and 0.32; the ex-post timing had therefore conferred no advantage. Both constructs are now confined to measurement.
 
 One residual risk remains. V2 relies on Compustat's recorded report date, whereas a trader would have used the date pre-announced by the company, normally two to four weeks ahead. The recorded dates are demonstrably the true event dates (the median stock-minus-index move on the reaction day is 2.68%, against 0.72% on a random day), and V2 requires only that the announcement fall somewhere within a four-week holding period. The bias is therefore likely to be small, but a clean test would require historical pre-announced calendars from I/B/E/S or a similar vendor.
 
@@ -149,7 +149,7 @@ The universe is not a fixed list. Eligibility is drawn from CRSP's historical me
 
 ## Overfitting/data-snooping
 
-Hypotheses, falsification criteria, the sample split, all three variants and every threshold were recorded in `research_log.md` before any result was computed. The thresholds (80% weight coverage, a 20–45 day expiry window, a one-year median filter, a four-quarter jump average) are round ex-ante choices; no parameter search was run. In total, three strategy variants and one discarded measurement method were tried, and the test period was evaluated once with no subsequent changes. The Deflated Sharpe Ratio, which adjusts for these trials and for skewness and kurtosis, is close to 1.00 in sample but only 0.51–0.76 out of sample. The out-of-sample edge does not survive selection correction.
+Hypotheses, falsification criteria, the sample split, all three variants and every threshold were recorded in `research_log.md` before any result was computed. The thresholds (80% weight coverage, a 20–45 day expiry window, a one-year median filter, a four-quarter jump average) are round ex-ante choices; no parameter search was run. In total, three strategy variants and one discarded measurement method were tried, and the test period was evaluated once with no subsequent changes. The Deflated Sharpe Ratio, which adjusts for these trials and for skewness and kurtosis, is close to 1.00 in sample but only 0.49–0.77 out of sample. The out-of-sample edge does not survive selection correction.
 
 ## Transaction costs and slippage
 
@@ -157,7 +157,7 @@ Options are executed at the mid plus a fraction of the quoted half-spread on eve
 
 ## Out-of-sample validation
 
-January 2013 to August 2025 (152 monthly trades) was excluded from all design work. Relative to the in-sample period, V1's Sharpe ratio fell from 1.17 to 0.10 and its mean monthly profit from 25.8 bp to 1.8 bp; V2 fell from 1.10 to 0.28 and V3 from 1.29 to 0.29. The measurement findings, by contrast, replicate: the earnings-season fall in raw implied correlation is stronger out of sample (*t* = −8.4) and the ex-event correction removes it entirely. The economic mechanism therefore persists while the tradeable premium has largely disappeared, which is consistent with the H2 finding that the remaining premium is event variance.
+January 2013 to August 2025 (152 monthly trades) was excluded from all design work. Relative to the in-sample period, V1's Sharpe ratio fell from 1.17 to 0.10 and its mean monthly profit from 25.8 bp to 1.8 bp; V2 fell from 1.16 to 0.30 and V3 from 1.33 to 0.32. The measurement findings, by contrast, replicate: the earnings-season fall in raw implied correlation is stronger out of sample (*t* = −8.4) and the ex-event correction removes it entirely. The economic mechanism therefore persists while the tradeable premium has largely disappeared, which is consistent with the H2 finding that the remaining premium is event variance.
 
 # 6. Efficiency Touchpoint
 
@@ -169,7 +169,7 @@ The classic quadratic step is implied correlation itself. The pairwise sum $\sum
 
 Each month the book is short \$1 of SPX straddle notional against about fifty theta-matched long single-stock straddles. It is net short vega (the long-to-short vega ratio has a median of 0.65 and a 5–95% range of 0.47–0.86), short volga and short correlation. The index leg's loss is unbounded in a crash, so a production version would cap index notional at a volatility-targeted fraction of capital. Diversification is largely illusory: fifty names enter the book, but its profit is driven by a single factor, the change in average correlation, and capitalisation weighting concentrates the long leg further (the five largest names carried 24% of the weight in 1996 and 45% in July 2025).
 
-The relevant adverse scenario is a correlation spike. Monthly profit has a beta of −0.015 to the change in implied correlation over the holding period (*t* = −4.7), and the worst months were March 2000 (−194 bp) and March 2020 (−178 bp). Across named stress episodes, V1 lost 211 bp around the dot-com peak, 131 bp in the 2010 flash crash and 71 bp during the Lehman collapse (197 bp for V2). Crashes are not uniformly harmful, because long single-stock gamma pays when the dispersion of returns rises with volatility: the book gained 216 bp during COVID and 292 bp in the 2022 rate shock (Figure 5). The more serious threat is liquidity. Single-stock spreads widen exactly when positions must be rebalanced, and with an out-of-sample break-even of only 0.7–1.3 half-spreads, a doubling of spreads under stress would turn a marginal strategy into a losing one.
+The relevant adverse scenario is a correlation spike. Monthly profit has a beta of −0.015 to the change in implied correlation over the holding period (*t* = −4.7), and the worst months were March 2000 (−194 bp) and March 2020 (−178 bp). Across named stress episodes, V1 lost 211 bp around the dot-com peak, 131 bp in the 2010 flash crash and 71 bp during the Lehman collapse (86 bp for V2). Crashes are not uniformly harmful, because long single-stock gamma pays when the dispersion of returns rises with volatility: the book gained 216 bp during COVID and 292 bp in the 2022 rate shock (Figure 5). The more serious threat is liquidity. Single-stock spreads widen exactly when positions must be rebalanced, and with an out-of-sample break-even of only 0.7–1.3 half-spreads, a doubling of spreads under stress would turn a marginal strategy into a losing one.
 
 ![**Figure 5.** Drawdown of V1 at half-spread costs, in basis points of index notional. Grey bands mark named stress episodes.](figures/fig4.png)
 
