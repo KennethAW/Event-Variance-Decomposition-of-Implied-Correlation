@@ -1,11 +1,9 @@
 <div class="titleblock">
-<p class="title">Event-Variance Decomposition of Implied Correlation: Macro Co-Jumps, Earnings Jumps and Theta-Weighted Dispersion</p>
 <p class="author">Kenneth Anthony Wijaya</p>
-<p class="meta">Data Structures and Algorithms · Imperial College Business School</p>
 <p class="meta">Submitted 19 October 2026</p>
+<p class="title">Event-Variance Decomposition of Implied Correlation</p>
+<p class="subtitle">Macro co-jumps, earnings jumps and theta-weighted dispersion in the S&amp;P 500, 1996–2025</p>
 </div>
-
-<p class="accompany">Accompanying files: <code>notebook.ipynb</code>, the <code>data/</code> snapshot, the extraction script <code>wrds_extract.py</code> and the pre-registration log <code>research_log.md</code>.</p>
 
 # 1. Hypothesis Pitch
 
