@@ -1,6 +1,6 @@
 <div class="titleblock">
 <p class="title">Event-Variance Decomposition of Implied Correlation:<br>Macro Co-Jumps, Earnings Jumps and Theta-Weighted Dispersion</p>
-<div class="byline"><span>Kenneth Anthony Wijaya</span><span>Submitted 19 October 2026</span></div>
+<div class="byline"><span>Kenneth Anthony Wijaya</span><span>Submitted 21 October 2026</span></div>
 </div>
 
 # 1. Hypothesis Pitch
