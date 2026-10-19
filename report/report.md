@@ -1,8 +1,6 @@
 <div class="titleblock">
-<p class="author">Kenneth Anthony Wijaya</p>
-<p class="meta">Submitted 19 October 2026</p>
-<p class="title">Event-Variance Decomposition of Implied Correlation</p>
-<p class="subtitle">Macro co-jumps, earnings jumps and theta-weighted dispersion in the S&amp;P 500, 1996–2025</p>
+<p class="title">Event-Variance Decomposition of Implied Correlation:<br>Macro Co-Jumps, Earnings Jumps and Theta-Weighted Dispersion</p>
+<div class="byline"><span>Kenneth Anthony Wijaya</span><span>Submitted 19 October 2026</span></div>
 </div>
 
 # 1. Hypothesis Pitch
