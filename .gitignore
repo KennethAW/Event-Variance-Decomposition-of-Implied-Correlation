@@ -1,0 +1,21 @@
+# Licensed or third-party raw data (not redistributable): rebuilt by wrds_extract.py and the notebook
+data/raw/wrds/
+data/raw/yahoo/
+data/raw/cboe/
+data/raw/sec/
+data/raw/dolthub_vol/
+data/raw/dolthub_chain/
+data/raw/sp500_membership.csv
+data/raw/manifest.json
+data/processed/straddles.parquet
+data/processed/earnings_events.parquet
+data/processed/basket.parquet
+
+# Local working files
+_backup/
+*.zip
+.ipynb_checkpoints/
+__pycache__/
+.env
+.venv/
+push_to_github.ps1
