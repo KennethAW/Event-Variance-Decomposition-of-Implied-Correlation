@@ -11,7 +11,7 @@ The mechanism follows from how option prices aggregate information. A stock's 30
 
 The idea arose while I was preparing for a quantitative-research interview on correlation trading. Working through Bennett's §6.3, I found that his shortcut approximations to implied correlation carry a regime-dependent bias, which raised the broader question of what else contaminates the number that dispersion desks trade.
 
-**Falsification.** H1 fails if raw and ex-event implied correlation display the same calendar pattern. H3 fails if event-timed and vanilla dispersion are statistically indistinguishable out of sample, or if any advantage disappears at realistic transaction costs. Both criteria were recorded in `research_log.md` before any result was computed.
+**Falsification.** H1 fails if raw and ex-event implied correlation display the same calendar pattern. H3 fails if event-timed and vanilla dispersion are statistically indistinguishable out of sample, or if any advantage disappears at realistic transaction costs. Both criteria were recorded in the research log (Appendix A) before any result was computed.
 
 # 2. Data Pipeline
 
@@ -149,7 +149,7 @@ The universe is not a fixed list. Eligibility is drawn from CRSP's historical me
 
 ## Overfitting/data-snooping
 
-Hypotheses, falsification criteria, the sample split, all three variants and every threshold were recorded in `research_log.md` before any result was computed. The thresholds (80% weight coverage, a 20–45 day expiry window, a one-year median filter, a four-quarter jump average) are round ex-ante choices; no parameter search was run. In total, three strategy variants and one discarded measurement method were tried. The test period was evaluated with fixed rules; the only subsequent change was the Amendment 3 correction of an implementation error described under look-ahead bias, which altered no parameter and is reported together with its effect. The Deflated Sharpe Ratio, which adjusts for these trials and for skewness and kurtosis, is close to 1.00 in sample but only 0.49–0.77 out of sample. The out-of-sample edge does not survive selection correction.
+Hypotheses, falsification criteria, the sample split, all three variants and every threshold were recorded in the research log (Appendix A) before any result was computed. The thresholds (80% weight coverage, a 20–45 day expiry window, a one-year median filter, a four-quarter jump average) are round ex-ante choices; no parameter search was run. In total, three strategy variants and one discarded measurement method were tried. The test period was evaluated with fixed rules; the only subsequent change was the Amendment 3 correction of an implementation error described under look-ahead bias, which altered no parameter and is reported together with its effect. The Deflated Sharpe Ratio, which adjusts for these trials and for skewness and kurtosis, is close to 1.00 in sample but only 0.49–0.77 out of sample. The out-of-sample edge does not survive selection correction.
 
 ## Transaction costs and slippage
 
@@ -161,9 +161,9 @@ January 2013 to August 2025 (152 monthly trades) was excluded from all design wo
 
 # 6. Efficiency Touchpoint
 
-The most expensive step is the conversion of option chains into hedged straddle profit. A naive implementation would retrieve the complete daily option surface for every constituent, of the order of 7,465 days × 50 names × 100–400 quotes, or $10^8$ to $10^9$ rows, and re-scan it each day to revalue positions. Two design decisions avoid this. Holding every position to expiry means that only entry-date chains are required (356 dates rather than 7,465), and filtering on the server reduces the extraction to 1.6 million rows. Each leg's daily hedge is then vectorised along its own path, so pricing scales as $O(S \cdot H)$, with $S$ = 17,925 legs and $H \approx 20$ days: roughly $3.6 \times 10^5$ hedge steps, completed in about 20 seconds in the submitted run.
+The most expensive step is the conversion of option chains into hedged straddle profit. A naive implementation would retrieve the complete daily option surface for every constituent, of the order of 7,465 days × 50 names × 100–400 quotes, or $10^8$ to $10^9$ rows, and re-scan it each day to revalue positions. Two design decisions avoid this. Holding every position to expiry means that only entry-date chains are required (356 dates rather than 7,465), and filtering on the server reduces the extraction to 1.6 million rows. Each leg's daily hedge is then vectorised along its own path, so pricing scales as $O(S \cdot H)$, with $S$ = 17,925 legs and $H \approx 20$ days: roughly $3.6 \times 10^5$ hedge steps, completed in about 25 seconds in the submitted run.
 
-The classic quadratic step is implied correlation itself. The pairwise sum $\sum_{i \neq j} w_i w_j \sigma_i \sigma_j$ is replaced by the exact identity $\left(\sum_i w_i \sigma_i\right)^2 - \sum_i w_i^2 \sigma_i^2$, reducing the daily cost from $O(n^2)$ to $O(n)$. In the submitted run, a Python double loop takes 0.93 ms per day at $n = 50$ (about 7 seconds over the sample) and would take 485 seconds at $n = 500$, whereas the vectorised identity processes the entire 7,465-day panel in 50 ms. At fifty names the naive approach would have been tolerable; the identity becomes necessary if the method is extended to the full index or to intraday data. Prefix sums make the rolling and expanding event-variance regressions $O(1)$ per day, and binary search counts the events inside each option window in $O(N \log E)$ time, several hundred times faster than a linear scan.
+The classic quadratic step is implied correlation itself. The pairwise sum $\sum_{i \neq j} w_i w_j \sigma_i \sigma_j$ is replaced by the exact identity $\left(\sum_i w_i \sigma_i\right)^2 - \sum_i w_i^2 \sigma_i^2$, reducing the daily cost from $O(n^2)$ to $O(n)$. In the submitted run, a Python double loop takes 0.76 ms per day at $n = 50$ (about 6 seconds over the sample) and would take 574 seconds at $n = 500$, whereas the vectorised identity processes the entire 7,465-day panel in 59 ms. At fifty names the naive approach would have been tolerable; the identity becomes necessary if the method is extended to the full index or to intraday data. Prefix sums make the rolling and expanding event-variance regressions $O(1)$ per day, and binary search counts the events inside each option window in $O(N \log E)$ time, several hundred times faster than a linear scan.
 
 # 7. Risk Touchpoint
 
@@ -198,3 +198,31 @@ Dubinsky, A., Johannes, M., Kaeck, A. and Seeger, N.J. (2019) 'Option pricing of
 Newey, W.K. and West, K.D. (1987) 'A simple, positive semi-definite, heteroskedasticity and autocorrelation consistent covariance matrix', *Econometrica*, 55(3), pp. 703–708.
 
 *Data:* OptionMetrics IvyDB US, CRSP and Compustat, accessed through Wharton Research Data Services; Board of Governors of the Federal Reserve System, FOMC meeting calendars; Federal Reserve Bank of St. Louis, FRED.
+
+# Appendix A. Research Log {.newpage}
+
+The log was kept alongside the code so that every design decision could be dated relative to the results. It supports the answer under *Overfitting/data-snooping* and fixes the number of trials used in the Deflated Sharpe Ratio. All entries are dated 19 October 2026; the order of entries reflects the order of events.
+
+**Pre-registration (before any result).** The study was first designed for free data: a sample from January 2019 to October 2026 (DoltHub options history), a design period of 2019–2022 with a held-out test from 2023, the point-in-time top-50 S&P 500 names rebalanced quarterly, and SPY options for the index leg. The hypotheses were:
+
+- *H1 (measurement):* 30-day implied correlation rises when the option's life spans scheduled macro releases (FOMC, CPI) and falls when it spans constituent earnings; removing the extracted event variance removes most of this calendar pattern.
+- *H2 (pricing):* the correlation risk premium differs between the raw and the ex-event measures; which leg carries the premium is the empirical question.
+- *H3 (trading):* event-timed theta-weighted dispersion beats vanilla monthly dispersion out of sample, after bid–ask costs.
+
+H1 would be falsified by no difference between raw and ex-event implied correlation around event windows; H3 by statistically indistinguishable out-of-sample profits, or by an edge that disappears at realistic costs.
+
+**Amendment 1 (WRDS access granted, before any result).** The primary source moved to OptionMetrics, CRSP and Compustat, with the free-data pipeline retained as a cross-check for 2019–2025. The sample became 2 January 1996 to 29 August 2025, the design period 1996–2012 and the test period January 2013 to August 2025, chosen for its longer history, its additional stress episodes and its overlap with Driessen, Maenhout and Vilkov (2009). The index leg became SPX options; the universe became the CRSP-based top fifty companies, one line per company; earnings dates came from Compustat. The hypotheses and falsification criteria were unchanged.
+
+**Amendment 2 (measurement choices, before any strategy result).** FOMC dates were taken from the Federal Reserve's meeting calendars, because FRED's 'FOMC Press Release' series is not a meeting calendar; scheduled decisions were validated at eight per year (seven in 2020), and unscheduled moves were excluded from the ex-ante event set. Where FRED lists two CPI dates in a month, the later (the release itself) was kept. The first index event-variance method, a pooled term-structure regression, produced estimates outside the admissible range and was replaced by the volatility-crush regression; this is counted as a methodology trial. Macro releases were treated as co-jumps and removed from both legs. The three strategy variants, the execution rules and the cost scenarios (mid, 50% and 100% of the quoted half-spread; 1 bp stock and 0.5 bp index hedge costs) were fixed before the backtest was run.
+
+| Variant | Design Sharpe | Test Sharpe | Test Deflated Sharpe | Status |
+|:----------------------------------|------------:|-----------:|-------------------:|:---------|
+| V1 Vanilla monthly dispersion | 1.17 | 0.10 | 0.49 | Reported |
+| V2 Event-timed dispersion | 1.16 | 0.30 | 0.77 | Reported |
+| V3 Signal-filtered dispersion | 1.33 | 0.32 | 0.70 | Reported |
+
+Table: **Table A1.** Variant log (half-spread costs; figures after Amendment 3; definitions in Section 3.1).
+
+**Outcome (after the single test-period run).** No parameter or threshold was changed after the test period was evaluated, and all three variants are reported. H1: the earnings half is supported and the macro half rejected. H2: the test-period premium is +0.025 raw (*t* = 2.9) against +0.007 ex-event (*t* = 0.8). H3: event-timing ranks ahead of vanilla dispersion out of sample but not significantly, and V1 and V3 are not robust to full-spread costs, so H3 is not supported.
+
+**Amendment 3 (implementation correction, after the test run).** An audit of the pitfall checklist against the code found that V2 and the V3 signal placed earnings announcements on the return-based reaction day, which is not available ex ante. Both rules were changed to use the recorded Compustat report date, while the reaction day was retained for the measurement study only. The change affected 267 of 17,569 V2 name-month assignments (1.5%) and altered no parameter, threshold or variant definition. Out-of-sample Sharpe ratios moved from 0.28 to 0.30 (V2) and from 0.29 to 0.32 (V3); V1 was unaffected.

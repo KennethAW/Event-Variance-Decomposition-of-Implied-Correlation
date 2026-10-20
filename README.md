@@ -32,14 +32,14 @@ Event-timing ranks ahead of vanilla dispersion out of sample, as the decompositi
 ```
 ├── notebook.ipynb            Full pipeline: acquisition → cleaning → features → event decomposition
 │                             → strategy → backtest → efficiency and risk diagnostics
-├── wrds_extract.py           Scripted, resumable WRDS extraction (OptionMetrics, CRSP, Compustat)
+├── wrds_extract.py           Standalone copy of the WRDS extraction in notebook section 1.9a
 ├── wrds_discovery.py         Checks which WRDS tables and date ranges a subscription covers
 ├── report/
 │   ├── report.pdf            Written report (methodology, results, pitfalls, reflection)
 │   ├── report.md             Markdown source of the report
 │   └── figures/              Figures used in the report
 ├── docs/
-│   └── research_log.md       Pre-registration, amendments and outcome
+│   └── research_log.md       Pre-registration, amendments and outcome (also Appendix A of the report)
 ├── data/
 │   ├── raw/fed/              FOMC meeting dates parsed from the Federal Reserve website
 │   ├── raw/fred/             CPI and payroll release dates; three-month T-bill rate (FRED)
@@ -54,7 +54,7 @@ Event-timing ranks ahead of vanilla dispersion out of sample, as the decompositi
 pip install -r requirements.txt
 ```
 
-1. **WRDS data.** Run `python wrds_extract.py` with an institutional WRDS account. It prompts for the username; the password is kept in the user's own `pgpass` file and is never written to the project. The script writes to `data/raw/wrds/` and resumes if interrupted.
+1. **WRDS data.** With an institutional WRDS account, run the notebook (section 1.9a extracts the data when `data/raw/wrds/` is empty) or `python wrds_extract.py`. It prompts for the username; the password is kept in the user's own `pgpass` file and is never written to the project. The script writes to `data/raw/wrds/` and resumes if interrupted.
 2. **FRED key.** Set the environment variable `FRED_API_KEY` (a free key from the St. Louis Fed) if `data/raw/fred/` needs to be rebuilt.
 3. **Notebook.** Run `notebook.ipynb` from the repository root, top to bottom. Every download step caches to `data/raw/` and skips work already done. Sections 2–7 run in under a minute once the data are present.
 
