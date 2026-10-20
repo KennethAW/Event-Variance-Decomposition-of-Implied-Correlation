@@ -48,7 +48,7 @@ WRDS access was granted (OptionMetrics, CRSP, Compustat). The primary data sourc
 
 ## Outcome (19 Oct 2026, after the single test-period run)
 
-- No parameter or rule was changed after the test period was evaluated. All three variants are reported; none was dropped.
+- No parameter or threshold was changed after the test period was evaluated; the only later change is the Amendment 3 implementation correction, reported with its effect. All three variants are reported; none was dropped.
 - H1: earnings half supported (raw implied correlation falls with the weight reporting inside the window; the ex-event measure removes it out of sample). Macro half rejected (no FOMC/CPI effect on raw implied correlation; macro releases scale both legs).
 - H2: test-period correlation premium +0.025 raw (t 2.9) vs +0.007 ex-event (t 0.8) - the recent premium is event variance.
 - H3: event-timed beats vanilla out of sample, but not significantly (DSR < 0.95) and not robust to full-spread costs -> not supported under the pre-registered criterion.
